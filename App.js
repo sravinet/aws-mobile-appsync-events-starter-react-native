@@ -1,12 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Platform } from 'react-native';
-import AWSAppSyncClient from "aws-appsync";
+
+// BEGIN AWS AppSync 
+import AWSAppSyncClient from 'aws-appsync';
 import { Rehydrated } from 'aws-appsync-react';
-import { AUTH_TYPE } from "aws-appsync/lib/link/auth-link";
-import { graphql, ApolloProvider, compose } from 'react-apollo';
-import * as AWS from 'aws-sdk';
-import awsconfig from './aws-exports';
+import { ApolloProvider } from 'react-apollo';
+import appsyncConfig from './config/AppSync';
+
+const appsyncClient = new AWSAppSyncClient({
+  url: appsyncConfig.graphqlEndpoint,
+  region: appsyncConfig.region,
+  auth: { type: appsyncConfig.authenticationType, apiKey: appsyncConfig.apiKey }
+});
+// END AWS AppSync 
+
+import { graphql, compose } from 'react-apollo';
+//import * as AWS from 'aws-sdk';
+
 import { StackNavigator } from 'react-navigation';
+
 import AllEvents from './Components/AllEvents'
 import AddEvent from "./Components/AddEvent";
 import ListEvents from './queries/ListEvents';
@@ -15,11 +27,6 @@ import DeleteEvent from './queries/DeleteEvent';
 
 console.disableYellowBox = true;
 
-const client = new AWSAppSyncClient({
-  url: awsconfig.graphqlEndpoint,
-  region: awsconfig.region,
-  auth: {type: AUTH_TYPE.API_KEY, apiKey: awsconfig.apiKey}
-});
 
 _button = function(navigation){
   if(Platform.OS === 'ios'){
@@ -62,7 +69,7 @@ const App = StackNavigator({
 });
 
 const WithProvider = () => (
-<ApolloProvider client={client}>
+<ApolloProvider client={appsyncClient}>
     <Rehydrated>
         <App />
     </Rehydrated>
