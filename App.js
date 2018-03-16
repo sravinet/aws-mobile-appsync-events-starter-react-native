@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Platform } from 'react-native';
 
 // BEGIN AWS AppSync 
+import appsyncConfig from './config/AppSync';
+import { ApolloProvider } from 'react-apollo';
 import AWSAppSyncClient from 'aws-appsync';
 import { Rehydrated } from 'aws-appsync-react';
-import { ApolloProvider } from 'react-apollo';
-import appsyncConfig from './config/AppSync';
 
 const appsyncClient = new AWSAppSyncClient({
   url: appsyncConfig.graphqlEndpoint,
